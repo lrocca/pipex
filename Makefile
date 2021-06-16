@@ -6,37 +6,44 @@
 #    By: lrocca <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/15 00:18:39 by lrocca            #+#    #+#              #
-#    Updated: 2021/06/16 14:22:21 by lrocca           ###   ########.fr        #
+#    Updated: 2021/06/16 17:26:46 by lrocca           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
-INC		=	-Iinc -Ilibft
+INC		=	-I$(INC_DIR) -I$(LIB_DIR)
 
 NAME	=	pipex
 
-SRC	=	src/main.c src/path.c
-OBJ	=	$(SRC:.c=.o)
+FILES	=	main.c exec.c
 
-LIBFT_DIR	=	libft
-LIBFT		=	$(LIBFT_DIR)/libft.a
+SRC_DIR	=	./src
+OBJ_DIR	=	./obj
+INC_DIR	=	./inc
+LIB_DIR	=	./libft
+
+SRC	=	$(addprefix $(SRC_DIR)/, $(FILES))
+OBJ	=	$(patsubst $(SRC_DIR)/%, $(OBJ_DIR)/%, $(SRC:.c=.o))
+
+LIBFT	=	$(LIB_DIR)/libft.a
 
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $^ -o $@
 
-%.o: %.c
-	$(CC) $(CFLAGS) $(INC) -c $^ -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-$(LIBFT): $(LIBFT_DIR)
+$(LIBFT): $(LIB_DIR)
 	make -C $^
 
 clean:
 	$(RM) $(OBJ)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) ./in ./out
 
 re: fclean all
