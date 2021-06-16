@@ -6,57 +6,22 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/15 00:25:04 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/15 19:22:37 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/16 14:33:08 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	ft_error(char *s)
+void	ft_error(char *s1, char *s2)
 {
-	// ft_putendl_fd(s, STDERR_FILENO);
-	if (!errno)
-		errno = 1;
-	perror(s);
+	ft_putstr_fd("pipex: ", STDERR_FILENO);
+	ft_putstr_fd(s1, STDERR_FILENO);
+	if (s2)
+	{
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(s2, STDERR_FILENO);
+	}
 	exit(EXIT_FAILURE);
-}
-
-char	*get_path(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (ft_strncmp(env[i], "PATH=", 5))
-		i++;
-	if (!env[i])
-		return (NULL);
-	return (env[i] + 5);
-}
-
-char	*find_exec(char *cmd, char **env)
-{
-	char	*path;
-	char	**split;
-	char	*ret;
-
-	path = get_path(env);
-	if (!path)
-		ft_error("no PATH in env");
-	cmd = ft_strjoin("/", cmd);
-	split = ft_splitset(path, ":");
-	while (*split)
-	{
-		ret = ft_strjoin(*split, cmd);
-		if (!access(ret, X_OK))
-			break ;
-		split++;
-	}
-	if (!*split)
-	{
-		errno = 127;
-		ft_error(cmd + 1);
-	}
-	return (ret);
 }
 
 void	ft_exec(char **av, char **env)
@@ -66,16 +31,21 @@ void	ft_exec(char **av, char **env)
 	cmd = av[0];
 	if (!ft_strchr(av[0], '/'))
 		cmd = find_exec(cmd, env);
-	execve(cmd, ++av, env);
-	ft_error(cmd);
+	execve(cmd, av, env);
+	ft_error("execve", strerror(errno));
 }
 
-void	ft_check(int ac, char **av)
+void	ft_init(int ac, char **av, int fd[2], pid_t *childpid)
 {
 	if (ac != 5)
-		ft_error("bad arguments");
+		ft_error("bad arguments", NULL);
 	if (access(av[1], R_OK) < 0)
-		ft_error(av[1]);
+		ft_error(av[1], strerror(errno));
+	if (pipe(fd) == -1)
+		ft_error("pipe failed", strerror(errno));
+	*childpid = fork();
+	if (*childpid < 0)
+		ft_error("fork failed", strerror(errno));
 }
 
 int	main(int ac, char **av, char **env)
@@ -84,31 +54,23 @@ int	main(int ac, char **av, char **env)
 	pid_t	childpid;
 	int		std;
 
-	ft_check(ac, av);
-	if (pipe(fd) == -1)
-		ft_error("pipe failed");
-	childpid = fork();
-	if (childpid < 0)
-		ft_error("fork failed");
+	ft_init(ac, av, fd, &childpid);
 	if (childpid == 0)
 	{
 		std = open(av[1], O_RDONLY);
 		if (std < 0)
-			ft_error(av[1]);
+			ft_error(av[1], strerror(errno));
 		if (dup2(fd[1], STDOUT_FILENO) < 0 || dup2(std, STDIN_FILENO) < 0)
-			ft_error("dup2 failed");
+			ft_error("dup2 failed", strerror(errno));
 		close(fd[0]);
 		ft_exec(ft_splitspace(av[2]), env);
 	}
-	else
-	{
-		std = open(av[4], O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-		if (std < 0)
-			ft_error(av[4]);
-		if (dup2(fd[0], STDIN_FILENO) < 0 || dup2(std, STDOUT_FILENO) < 0)
-			ft_error("dup2 failed");
-		close(fd[1]);
-		ft_exec(ft_splitspace(av[3]), env);
-	}
+	std = open(av[4], O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	if (std < 0)
+		ft_error(av[4], strerror(errno));
+	if (dup2(fd[0], STDIN_FILENO) < 0 || dup2(std, STDOUT_FILENO) < 0)
+		ft_error("dup2 failed", strerror(errno));
+	close(fd[1]);
+	ft_exec(ft_splitspace(av[3]), env);
 	return (0);
 }

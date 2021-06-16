@@ -6,7 +6,7 @@
 #    By: lrocca <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/15 00:18:39 by lrocca            #+#    #+#              #
-#    Updated: 2021/06/15 12:27:45 by lrocca           ###   ########.fr        #
+#    Updated: 2021/06/16 14:22:21 by lrocca           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ INC		=	-Iinc -Ilibft
 
 NAME	=	pipex
 
-SRC	=	src/main.c
+SRC	=	src/main.c src/path.c
 OBJ	=	$(SRC:.c=.o)
 
 LIBFT_DIR	=	libft

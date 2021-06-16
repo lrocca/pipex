@@ -3,3 +3,10 @@
 
 # executables
 /pipex
+
+# pipex files
+/in
+/out
+
+# Visual Studio Code
+.vscode
