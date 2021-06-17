@@ -6,7 +6,7 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 14:11:02 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/16 17:35:47 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/17 18:32:09 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*find_exec(char *cmd, char **env)
 	return (ret);
 }
 
-void	ft_exec(char **av, char **env)
+void	ft_exec(char **av, char **env, int fd[2])
 {
 	char	*cmd;
 
@@ -61,5 +61,7 @@ void	ft_exec(char **av, char **env)
 	if (!ft_strchr(av[0], '/'))
 		cmd = find_exec(cmd, env);
 	execve(cmd, av, env);
+	close(fd[0]);
+	close(fd[1]);
 	ft_error("execve", strerror(errno));
 }
