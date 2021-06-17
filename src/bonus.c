@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   bonus.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/15 00:25:04 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/17 18:46:09 by lrocca           ###   ########.fr       */
+/*   Created: 2021/06/17 18:46:50 by lrocca            #+#    #+#             */
+/*   Updated: 2021/06/17 20:09:17 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	main(int ac, char **av, char **env)
 	pid_t	childpid;
 
 	if (ac == 1)
-		ft_error("usage", "./pipex file1 cmd1 cmd2 file2");
-	if (ac != 5)
+		ft_error("usage", "./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2");
+	if (ac < 5)
 		ft_error("bad args", NULL);
 	if (access(av[1], R_OK) < 0)
 		ft_error(av[1], strerror(errno));

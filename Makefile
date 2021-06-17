@@ -6,7 +6,7 @@
 #    By: lrocca <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/15 00:18:39 by lrocca            #+#    #+#              #
-#    Updated: 2021/06/16 17:26:46 by lrocca           ###   ########.fr        #
+#    Updated: 2021/06/17 20:03:09 by lrocca           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,13 @@ INC		=	-I$(INC_DIR) -I$(LIB_DIR)
 
 NAME	=	pipex
 
-FILES	=	main.c exec.c
+FILES	=	exec.c error.c
+
+ifdef WITH_BONUS
+FILES	+=	bonus.c
+else
+FILES	+=	main.c
+endif
 
 SRC_DIR	=	./src
 OBJ_DIR	=	./obj
@@ -38,12 +44,18 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 $(LIBFT): $(LIB_DIR)
-	make -C $^
+	$(MAKE) -C $^
 
+clean: FILES += main.c bonus.c
 clean:
+	$(MAKE) clean -C $(LIB_DIR)
 	$(RM) $(OBJ)
 
 fclean: clean
-	$(RM) $(NAME) ./in ./out
+	$(MAKE) fclean -C $(LIB_DIR)
+	$(RM) $(NAME) ./in ./outx
 
 re: fclean all
+
+bonus:
+	$(MAKE) WITH_BONUS=1 all
