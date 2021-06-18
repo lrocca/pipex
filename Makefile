@@ -6,7 +6,7 @@
 #    By: lrocca <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/15 00:18:39 by lrocca            #+#    #+#              #
-#    Updated: 2021/06/17 20:03:09 by lrocca           ###   ########.fr        #
+#    Updated: 2021/06/18 20:23:56 by lrocca           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,10 @@ NAME	=	pipex
 
 FILES	=	exec.c error.c
 
+FILES_BONUS	=	bonus/main.c bonus/infile.c
+
 ifdef WITH_BONUS
-FILES	+=	bonus.c
+FILES	+=	$(FILES_BONUS)
 else
 FILES	+=	main.c
 endif
@@ -46,7 +48,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 $(LIBFT): $(LIB_DIR)
 	$(MAKE) -C $^
 
-clean: FILES += main.c bonus.c
+clean: FILES += main.c $(FILES_BONUS)
 clean:
 	$(MAKE) clean -C $(LIB_DIR)
 	$(RM) $(OBJ)
@@ -58,4 +60,4 @@ fclean: clean
 re: fclean all
 
 bonus:
-	$(MAKE) WITH_BONUS=1 all
+	@$(MAKE) WITH_BONUS=1 all
