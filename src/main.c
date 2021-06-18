@@ -6,27 +6,27 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/15 00:25:04 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/17 18:46:09 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/18 19:55:48 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	ft_child(char **av, char **env, int fd[2])
+void	ft_child(char **av, int fd[2])
 {
 	int	infile;
 
 	infile = open(av[1], O_RDONLY);
 	if (infile < 0)
 		ft_error(av[1], strerror(errno));
-	if (dup2(fd[1], STDOUT_FILENO) < 0 || dup2(infile, STDIN_FILENO) < 0)
+	if (dup2(infile, STDIN_FILENO) < 0 || dup2(fd[1], STDOUT_FILENO) < 0)
 		ft_error("dup2 failed", strerror(errno));
 	close(fd[0]);
 	fd[0] = infile;
-	ft_exec(ft_splitspace(av[2]), env, fd);
+	ft_exec(ft_splitspace(av[2]), fd);
 }
 
-void	ft_parent(char **av, char **env, int fd[2])
+void	ft_parent(char **av, int fd[2])
 {
 	int	outfile;
 
@@ -37,10 +37,10 @@ void	ft_parent(char **av, char **env, int fd[2])
 		ft_error("dup2 failed", strerror(errno));
 	close(fd[1]);
 	fd[1] = outfile;
-	ft_exec(ft_splitspace(av[3]), env, fd);
+	ft_exec(ft_splitspace(av[3]), fd);
 }
 
-int	main(int ac, char **av, char **env)
+int	main(int ac, char **av)
 {
 	int		fd[2];
 	pid_t	childpid;
@@ -57,7 +57,7 @@ int	main(int ac, char **av, char **env)
 	if (childpid < 0)
 		ft_error("fork failed", strerror(errno));
 	if (childpid == 0)
-		ft_child(av, env, fd);
-	ft_parent(av, env, fd);
+		ft_child(av, fd);
+	ft_parent(av, fd);
 	return (0);
 }

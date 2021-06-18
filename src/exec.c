@@ -6,32 +6,33 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 14:11:02 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/17 18:32:09 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/18 17:57:21 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-char	*get_path(char **env)
+char	*get_path(void)
 {
+	extern char	**environ;
 	int	i;
 
 	i = 0;
-	while (ft_strncmp(env[i], "PATH=", 5))
+	while (ft_strncmp(environ[i], "PATH=", 5))
 		i++;
-	if (!env[i])
+	if (!environ[i])
 		ft_error("no PATH in env", NULL);
-	return (env[i] + 5);
+	return (environ[i] + 5);
 }
 
-char	*find_exec(char *cmd, char **env)
+char	*find_exec(char *cmd)
 {
 	char	**split;
 	char	*path;
 	char	*ret;
 	int		i;
 
-	path = get_path(env);
+	path = get_path();
 	cmd = ft_strjoin("/", cmd);
 	split = ft_splitset(path, ":");
 	ret = NULL;
@@ -53,14 +54,15 @@ char	*find_exec(char *cmd, char **env)
 	return (ret);
 }
 
-void	ft_exec(char **av, char **env, int fd[2])
+void	ft_exec(char **av, int fd[2])
 {
-	char	*cmd;
+	char		*cmd;
+	extern char	**environ;
 
 	cmd = av[0];
 	if (!ft_strchr(av[0], '/'))
-		cmd = find_exec(cmd, env);
-	execve(cmd, av, env);
+		cmd = find_exec(cmd);
+	execve(cmd, av, environ);
 	close(fd[0]);
 	close(fd[1]);
 	ft_error("execve", strerror(errno));
