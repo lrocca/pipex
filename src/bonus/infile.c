@@ -6,7 +6,7 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:45:54 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/19 02:34:04 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/19 02:53:50 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ int	ft_get_infile(char *filename, char *delimiter)
 		close(fd[1]);
 		return (fd[0]);
 	}
-	else if (access(filename, R_OK) < 0)
-		ft_error(filename, strerror(errno));
 	infile = open(filename, O_RDONLY);
 	if (infile < 0)
 		ft_error(filename, strerror(errno));

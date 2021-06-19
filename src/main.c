@@ -6,7 +6,7 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/15 00:25:04 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/18 19:55:48 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/19 02:46:32 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ int	main(int ac, char **av)
 		ft_error("usage", "./pipex file1 cmd1 cmd2 file2");
 	if (ac != 5)
 		ft_error("bad args", NULL);
-	if (access(av[1], R_OK) < 0)
-		ft_error(av[1], strerror(errno));
 	if (pipe(fd) == -1)
 		ft_error("pipe failed", strerror(errno));
 	childpid = fork();
