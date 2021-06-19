@@ -6,7 +6,7 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 14:11:02 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/19 03:02:57 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/19 03:09:52 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static char	*get_path(void)
 {
+	int			i;
 	extern char	**environ;
-	int	i;
 
 	i = 0;
 	while (ft_strncmp(environ[i], "PATH=", 5))

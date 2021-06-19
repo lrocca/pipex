@@ -6,7 +6,7 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:46:50 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/19 02:59:31 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/19 03:09:20 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	ft_parent(char **av, int fd[2], int i)
 		ft_error(av[i], strerror(errno));
 	if (dup2(fd[0], STDIN_FILENO) < 0 || dup2(outfile, STDOUT_FILENO) < 0)
 		ft_error("dup2 failed", strerror(errno));
-	// close(fd[1]);
 	fd[1] = outfile;
 	ft_exec(ft_splitspace(av[--i]), fd);
 }
