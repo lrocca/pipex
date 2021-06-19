@@ -6,7 +6,7 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:45:54 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/18 20:23:07 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/19 02:34:04 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static void	ft_here_doc(int fd, char *del)
 		if (ft_strcmp(line, del) == 0)
 			break ;
 		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
 		free(line);
 		line = NULL;
 	}
