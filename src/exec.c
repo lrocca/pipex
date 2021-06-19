@@ -6,13 +6,13 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 14:11:02 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/18 17:57:21 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/19 03:02:57 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-char	*get_path(void)
+static char	*get_path(void)
 {
 	extern char	**environ;
 	int	i;
@@ -25,7 +25,7 @@ char	*get_path(void)
 	return (environ[i] + 5);
 }
 
-char	*find_exec(char *cmd)
+static char	*find_exec(char *cmd)
 {
 	char	**split;
 	char	*path;
