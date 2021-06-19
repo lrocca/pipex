@@ -6,7 +6,7 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:46:50 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/18 20:23:03 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/19 02:27:37 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,25 @@ void	ft_child(char *cmd, int fd[2])
 
 int	ft_first_child(char **av, int fd[2])
 {
-	int		infile;
 	pid_t	childpid;
+	int		tmp;
+	int		infile;
 	char	here_doc;
 
 	here_doc = (ft_strcmp(av[1], "here_doc") == 0);
 	infile = ft_get_infile(av[1], av[2]);
+	if (pipe(fd) == -1)
+		ft_error("pipe failed", strerror(errno));
+	tmp = fd[0];
+	fd[0] = infile;
 	childpid = fork();
 	if (childpid < 0)
 		ft_error("fork failed", strerror(errno));
 	if (childpid == 0)
-		ft_child(av[1 + here_doc], fd);
-	return (2 + here_doc);
+		ft_child(av[2 + here_doc], fd);
+	close(fd[1]);
+	fd[0] = tmp;
+	return (3 + here_doc);
 }
 
 void	ft_parent(char **av, int fd[2], int i)

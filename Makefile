@@ -6,7 +6,7 @@
 #    By: lrocca <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/15 00:18:39 by lrocca            #+#    #+#              #
-#    Updated: 2021/06/18 20:23:56 by lrocca           ###   ########.fr        #
+#    Updated: 2021/06/19 02:35:56 by lrocca           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ clean:
 
 fclean: clean
 	$(MAKE) fclean -C $(LIB_DIR)
-	$(RM) $(NAME) ./in ./outx
+	$(RM) $(NAME) ./in ./out
 
 re: fclean all
 
