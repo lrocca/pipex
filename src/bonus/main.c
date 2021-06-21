@@ -6,7 +6,7 @@
 /*   By: lrocca <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:46:50 by lrocca            #+#    #+#             */
-/*   Updated: 2021/06/19 03:09:20 by lrocca           ###   ########.fr       */
+/*   Updated: 2021/06/21 15:49:51 by lrocca           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	main(int ac, char **av)
 
 	if (ac == 1)
 		ft_error("usage", "./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2");
-	if (ac < 5)
+	if (ac < 5 + (ft_strcmp(av[1], "here_doc") == 0))
 		ft_error("bad args", NULL);
 	i = ft_first_child(av, fd);
 	while (av[i + 2])
@@ -91,6 +91,7 @@ int	main(int ac, char **av)
 		ft_loop(av[i++], fd);
 		prev = next;
 	}
+	fd[0] = prev;
 	ft_parent(av, fd, i);
 	return (0);
 }
